@@ -4,6 +4,7 @@ import wave as wave
 import pyroomacoustics as pa
 import numpy as np
 import scipy.signal as sp
+import matplotlib.pyplot as plt
 
 #ステアリングベクトルを算出
 #mic_position: 3 x M  dimensional ndarray [[x,y,z],[x,y,z]]
@@ -180,6 +181,7 @@ room.simulate(snr=SNR)
 multi_conv_data=room.mic_array.signals
 
 
+
 #畳み込んだ波形をファイルに書き込む
 write_file_from_time_signal(multi_conv_data[0]*np.iinfo(np.int16).max/20.,"./ds_interference_in_m32.wav",sample_rate)
 
@@ -187,8 +189,9 @@ write_file_from_time_signal(multi_conv_data[0]*np.iinfo(np.int16).max/20.,"./ds_
 near_steering_vectors=calculate_steering_vector(R,source_locations[:,:1],freqs,is_use_far=False)
 
 #短時間フーリエ変換を行う
+print(near_steering_vectors.shape)
+print(near_steering_vectors)
 f,t,stft_data=sp.stft(multi_conv_data,fs=sample_rate,window="hann",nperseg=N)
-
 #遅延和アレイを実行する
 s_hat=np.einsum("ksm,mkt->skt",np.conjugate(near_steering_vectors),stft_data)
 

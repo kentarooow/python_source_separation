@@ -63,7 +63,6 @@ amp=np.abs(stft_data)
 
 #入力信号の位相を取得
 phase=stft_data/np.maximum(amp,1.e-20)
-
 #雑音だけの区間のフレーム数
 n_noise_only_frame=np.sum(t<(n_noise_only/sampling_rate))
 
